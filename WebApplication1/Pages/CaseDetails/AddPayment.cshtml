@@ -1,0 +1,21 @@
+﻿@page
+@model WebApplication1.Pages.CaseDetails.AddPaymentModel
+@{
+    ViewData["Title"] = "Add Payment";
+}
+
+<h2>Add Payment</h2>
+
+<div>
+    <form method="post">
+        <label asp-for="CaseId" class="form-label" hidden="true"></label>
+        <label asp-for="SelectedServiceRequest.Reference" class="form-label" hidden="true"></label>
+        <div class="mb-3">
+            <label asp-for="PaymentAmount" class="form-label"></label>
+            <input asp-for="PaymentAmount" class="form-control" />
+            <span asp-validation-for="PaymentAmount" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
