@@ -35,6 +35,19 @@
             }
         }
 
+        public int InvoiceAmountGross
+        {
+            get
+            {
+                _invoiceAmount = 0;
+                foreach (var item in Fees)
+                {
+                    _invoiceAmount += item.Amount;
+                }
+                return _invoiceAmount;
+            }
+        }
+
         public string Status
         {
 

@@ -1,0 +1,36 @@
+﻿@page
+@model PaymentsWeb.Pages.CaseDetails.AddServiceRequestModel
+
+
+
+@{
+    ViewData["Title"] = "Add Service Request";
+}
+
+<div class="container mt-5">
+    <h2>Add Service Request</h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label asp-for="CaseId" class="form-label" hidden="true"></label>
+            @foreach (var fee in Model.AllFees)
+            {
+                <div class="form-check">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           name="SelectedFeeIds"
+                           value="@fee.Code"
+                           id="product_@fee.Code" />
+                    <label class="form-check-label" for="product_@fee.Code">
+                        @String.Concat(fee.Code, "[", @fee.Amount, "]")
+                    </label>
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    
+</div>
+

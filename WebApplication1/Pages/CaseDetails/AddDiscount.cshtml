@@ -1,0 +1,23 @@
+﻿@page
+@model PaymentsWeb.Pages.CaseDetails.AddDiscountModel
+@{
+    ViewData["Title"] = "Add Discount";
+}
+
+<h2>Add Help with Fees</h2>
+
+<div>
+    <form method="post">
+        <label asp-for="CaseId" class="form-label" hidden="true"></label>
+        <label asp-for="SelectedServiceRequest.Reference" class="form-label" hidden="true"></label>
+        <input type="hidden" asp-for="FeeCode" />
+
+        <div class="mb-3">
+            <label asp-for="DiscountAmount" class="form-label"></label>
+            <input asp-for="DiscountAmount" class="form-control" />
+            <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
