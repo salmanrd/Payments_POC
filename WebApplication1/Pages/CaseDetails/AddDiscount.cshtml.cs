@@ -40,6 +40,26 @@ namespace PaymentsWeb.Pages.CaseDetails
                 ModelState.AddModelError("DiscountAmount", "Discount amount must be greater than zero.");
                 return Page();
             }
+            if (discountAmount > 0)
+            {
+                var case1 = _staticData.CaseList.FirstOrDefault(c => c.CaseId == caseId);
+                if (case1 != null)
+                {
+                    var serviceRequest = case1.ServiceRequests.FirstOrDefault(s => s.Reference == sr);
+                    if (serviceRequest != null)
+                    {
+                        var fee = serviceRequest.Fees.FirstOrDefault(f => f.Code == feeCode);
+                        if (fee != null && discountAmount > 0 && discountAmount > fee.Amount)
+                        {
+
+                            ModelState.AddModelError("DiscountAmount", "Discount amount cant be greater Fee price.");
+                            return Page();
+
+                        }
+                    }
+                }
+               
+            }
 
             _staticData.AddDiscount(caseId, sr, feeCode, discountAmount);
             var caseRef = caseId;
