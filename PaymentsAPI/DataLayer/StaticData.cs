@@ -2,14 +2,12 @@
 
 namespace PaymentsAPI.DataLayer
 {
-    public static class StaticData
+    public class StaticData
     {
-        public static List<Case> CaseList { get; set; }
-
-        public static void InitialiseData()
+        public List<Case> CaseList;
+        
+        public StaticData()
         {
-            CaseList = new List<Case>();
-
             CaseList = new List<Case>
             {
                 new Case { CaseId = "101", ServiceRequests = new List<ServiceRequest>
@@ -27,6 +25,26 @@ namespace PaymentsAPI.DataLayer
                 }
 
             };
+        }
+
+        public void AddPayment(string caseId, string sr, int paymentAmount)
+        {
+            var case1 = CaseList.FirstOrDefault(c => c.CaseId == caseId);
+            if (case1 != null)
+            {
+                var serviceRequest = case1.ServiceRequests.FirstOrDefault(s => s.Reference == sr);
+                if (serviceRequest != null && serviceRequest.CanPay)
+                {
+                    var paymentInstruction = new PaymentInstruction
+                    {
+                        Reference = "PAY" + DateTime.Now.Ticks,
+                        PaymentMethod = "Online",
+                        Amount = paymentAmount,
+                        Status = "Success"
+                    };
+                    serviceRequest.Payments.Add(paymentInstruction);
+                }
+            }
 
         }
     }

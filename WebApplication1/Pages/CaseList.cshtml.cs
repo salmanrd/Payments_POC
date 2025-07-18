@@ -9,11 +9,17 @@ namespace WebApplication1.Pages
     {
         public List<Case> CaseList { get; set; }
 
+        private readonly StaticData _staticData;
+        public CaseListModel(StaticData staticData)
+        {
+            _staticData = staticData;
+        }
+       
         public void OnGet()
         {
-            StaticData.InitialiseData();
-            CaseList = StaticData.CaseList;
             
+            CaseList = _staticData.CaseList;
+
         }
     }
 }

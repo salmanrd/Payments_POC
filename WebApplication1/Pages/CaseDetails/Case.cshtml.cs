@@ -7,10 +7,16 @@ namespace WebApplication1.Pages.CaseDetails
 {
     public class CaseModel : PageModel
     {
+        private readonly StaticData _staticData;
         public Case SelectedCase { get; set; }
+
+        public CaseModel(StaticData staticData)
+        {
+             _staticData = staticData;
+        }
         public void OnGet(string caseId)
         {
-            var caseList = StaticData.CaseList;
+            var caseList = _staticData.CaseList ;
 
             SelectedCase = caseList.FirstOrDefault(c => c.CaseId == caseId);
         }

@@ -1,7 +1,10 @@
+using PaymentsAPI.DataLayer;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<StaticData>();
 
 var app = builder.Build();
 

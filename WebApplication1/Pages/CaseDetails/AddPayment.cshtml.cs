@@ -12,9 +12,15 @@ namespace WebApplication1.Pages.CaseDetails
         public ServiceRequest SelectedServiceRequest { get; set; }
         public string CaseId { get; set; }
         public int PaymentAmount { get; set; }
+
+        private readonly StaticData _staticData;
+        public AddPaymentModel(StaticData staticData)
+        {
+            _staticData = staticData;
+        }
         public void OnGet(string caseId, string sr)
         {
-            var caseList = StaticData.CaseList;
+            var caseList = _staticData.CaseList;
 
             var case1 = caseList.FirstOrDefault(c => c.CaseId == caseId);
             CaseId = caseId;
@@ -24,25 +30,21 @@ namespace WebApplication1.Pages.CaseDetails
             }
         }
 
-        public void OnPost(int PaymentAmount, string caseId, string sr)
+        public IActionResult OnPost(int PaymentAmount, string caseId, string sr)
         {
-            var caseList = StaticData.CaseList;
-            var case1 = caseList.FirstOrDefault(c => c.CaseId == caseId);
-            if (case1 != null)
+
+            if (PaymentAmount <= 0)
             {
-                var serviceRequest = case1.ServiceRequests.FirstOrDefault(s => s.Reference == sr);
-                if (serviceRequest != null && serviceRequest.CanPay)
-                {
-                    var paymentInstruction = new PaymentInstruction
-                    {
-                        Reference = "PAY" + DateTime.Now.Ticks,
-                        PaymentMethod = "Online",
-                        Amount = PaymentAmount,
-                        Status = "Success"
-                    };
-                    serviceRequest.Payments.Add(paymentInstruction);
-                }
+                ModelState.AddModelError("PaymentAmount", "Payment amount must be greater than zero.");
+                return Page();
             }
+
+            _staticData.AddPayment(caseId, sr, PaymentAmount);
+            var caseRef = caseId;
+
+            return RedirectToPage("/CaseDetails/Case", new { caseId = caseRef });
+            
+            
         }
     }
 }
