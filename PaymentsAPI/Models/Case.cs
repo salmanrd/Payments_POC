@@ -14,7 +14,12 @@
         {
             get
             {
-                return AmountDue1();
+                var _total = 0;
+                foreach (var serviceRequest in ServiceRequests)
+                {
+                    _total += serviceRequest.AmountDue;
+                }
+                return _total;
             }
         }
 
@@ -22,7 +27,12 @@
         {
             get
             {
-                return AmountDue < 0 ? -AmountDue : 0;
+                var _total = 0;
+                foreach (var serviceRequest in ServiceRequests)
+                {
+                    _total += serviceRequest.OverPayment;
+                }
+                return _total;
             }
         }
         public int TotalRemission

@@ -6,6 +6,9 @@
 <p>
     <div>
         <h2>Case Reference : @Model.SelectedCase.CaseId</h2>
+        <a href="Reset">
+            Reset
+        </a>
     </div>
 
 </p>
@@ -66,7 +69,7 @@
                             @foreach (var fee in sr.Fees)
                             {
                                <div>
-                                @String.Concat(fee.Code, "[", fee.Amount, ",", fee.ChargeableAmount, "]")
+                                @String.Concat(fee.Code, "[", fee.GrossAmount, ",", fee.ChargeableAmount, "]")
 
                                 @if (fee.CanAddRemission)
                                 {

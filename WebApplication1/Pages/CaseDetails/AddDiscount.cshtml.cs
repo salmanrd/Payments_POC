@@ -49,7 +49,7 @@ namespace PaymentsWeb.Pages.CaseDetails
                     if (serviceRequest != null)
                     {
                         var fee = serviceRequest.Fees.FirstOrDefault(f => f.Code == feeCode);
-                        if (fee != null && discountAmount > 0 && discountAmount > fee.Amount)
+                        if (fee != null && discountAmount > 0 && discountAmount > fee.GrossAmount)
                         {
 
                             ModelState.AddModelError("DiscountAmount", "Discount amount cant be greater Fee price.");

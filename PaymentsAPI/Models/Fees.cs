@@ -1,12 +1,12 @@
 ﻿namespace PaymentsAPI.Models
 {
-    public class FeeItem
-    {
-        public string Code { get; set; }
-        public int Amount { get; set; }
-    }
     public class Fees
     {
+        private List<Apportionment> _apportionmentList;
+        public List<Apportionment> ApportionmentList
+        {
+            get { return _apportionmentList; }
+        }
         public bool CanAddRemission
         {
             get
@@ -17,9 +17,10 @@
         public Fees()
         {
             Remissiom = new HelpWithFees();
+            _apportionmentList = new List<Apportionment>();
         }
         public string Code { get; set; }
-        public int Amount { get; set; }
+        public int GrossAmount { get; set; }
 
         public HelpWithFees Remissiom { get; set; }
 
@@ -27,9 +28,20 @@
         {
             get
             {
-                return Amount - Remissiom.Discount;
+                return GrossAmount - Remissiom.Discount;
             }
         }
+
+        public void ApportionPayment(PaymentInstruction payment, int amount)
+        {   
+            var _apportionment = new Apportionment
+            {
+                Payment = payment,
+                ApportionedAmount = amount
+            };
+            ApportionmentList.Add(_apportionment);
+        }
+
 
     }
 }

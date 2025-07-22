@@ -10,7 +10,7 @@
         {
             get
             {
-                return Status == "Partially Paid" || Status == "Unpaid";
+                return Status.StartsWith("Partially Paid")|| Status.StartsWith( "Unpaid");
             }
         }
 
@@ -42,7 +42,7 @@
                 _invoiceAmount = 0;
                 foreach (var item in Fees)
                 {
-                    _invoiceAmount += item.Amount;
+                    _invoiceAmount += item.GrossAmount;
                 }
                 return _invoiceAmount;
             }
@@ -59,6 +59,41 @@
             }
         }
 
+        public int OverPayment
+        {
+            get
+            {
+                var _payments = 0;
+                foreach (var item in Payments)
+                {
+                    _payments += item.Amount;
+                }
+                if (_payments < InvoiceAmount)
+                {
+                    return 0;
+                }
+                return _payments - InvoiceAmount   ;
+            }
+        }
+        public int AmountDue
+        {
+            get
+            {
+                var _payments = 0;
+                foreach (var item in Payments)
+                {
+                    _payments += item.Amount;
+                }
+                if (_payments >= InvoiceAmount)
+                {
+                    return 0;
+                }
+                return InvoiceAmount - _payments;
+            }
+        }
+
+
+
         internal  string GetStatus()
         {
             var _payments = 0;
@@ -73,15 +108,15 @@
             }
             else if (_payments > InvoiceAmount)
             {
-                return "Overpaid";
+                return String.Concat("Overpaid by (" , _payments -  InvoiceAmount, ")");
             }
             else if (_payments > 0 && _payments < InvoiceAmount)
             {
-                return "Partially Paid";
+                return String.Concat("Partially Paid" , " Yet to pay :(",InvoiceAmount - _payments  ,")" );
             }
             else
             {
-                return "Unpaid";
+                return String.Concat("Unpaid" , " Yet to pay :(",InvoiceAmount - _payments  ,")");
             }
         }
 

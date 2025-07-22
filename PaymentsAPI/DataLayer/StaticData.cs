@@ -6,7 +6,13 @@ namespace PaymentsAPI.DataLayer
     {
         public List<Case> CaseList;
 
+
         public StaticData()
+        {
+            Init();
+        }
+
+        public void Init()
         {
             CaseList = new List<Case>
             {
@@ -17,8 +23,8 @@ namespace PaymentsAPI.DataLayer
                            Reference = "SR101",
                            Fees = new List<Fees>
                            {
-                               new Fees { Code = "F001", Amount = 100 },
-                               new Fees { Code = "F002", Amount = 50 }
+                               new Fees { Code = "F001", GrossAmount = 100 },
+                               new Fees { Code = "F002", GrossAmount = 50 }
                            }
                        }
                     }
@@ -43,9 +49,58 @@ namespace PaymentsAPI.DataLayer
                         Status = "Success"
                     };
                     serviceRequest.Payments.Add(paymentInstruction);
+                    CreateApportionment(paymentAmount, serviceRequest, paymentInstruction);
                 }
             }
 
+        }
+
+        private void CreateApportionment(int paymentAmount, ServiceRequest serviceRequest, PaymentInstruction paymentInstruction)
+        {
+            foreach (var fee in serviceRequest.Fees)
+            {
+                
+
+                if (paymentAmount >= fee.GrossAmount && fee != serviceRequest.Fees.Last())
+                {
+                    fee.ApportionPayment(paymentInstruction, fee.GrossAmount);
+                    paymentAmount -= fee.GrossAmount;
+                }
+                else
+                {
+                    fee.ApportionPayment(paymentInstruction, paymentAmount);
+                    paymentAmount = 0;
+                }
+            }
+        }
+
+        private static void CreateApportionment2(int paymentAmount, ServiceRequest serviceRequest, PaymentInstruction paymentInstruction)
+        {
+            var apportionAmount = paymentAmount;
+
+            if (serviceRequest.Fees.Count == 1)
+            {
+                serviceRequest.Fees[0].ApportionPayment(paymentInstruction, paymentAmount);
+            }
+            else
+            {
+                foreach (var fee in serviceRequest.Fees)
+                {
+                    
+                    if (fee.GrossAmount < apportionAmount)
+                    {
+                        fee.ApportionPayment(paymentInstruction, fee.GrossAmount);
+                        
+                    }
+                    else
+                    {
+                        fee.ApportionPayment(paymentInstruction, apportionAmount);
+
+                    }
+                    apportionAmount = apportionAmount - fee.GrossAmount;
+
+                }
+            }
         }
 
         public void AddDiscount(string caseId, string sr, string feeCode, int discountAmount)
@@ -57,7 +112,7 @@ namespace PaymentsAPI.DataLayer
                 if (serviceRequest != null)
                 {
                     var fee = serviceRequest.Fees.FirstOrDefault(f => f.Code == feeCode);
-                    if (fee != null && discountAmount > 0 && discountAmount <= fee.Amount)
+                    if (fee != null && discountAmount > 0 && discountAmount <= fee.GrossAmount)
                     {
 
                         fee.Remissiom = new HelpWithFees
@@ -81,10 +136,12 @@ namespace PaymentsAPI.DataLayer
                 var newServiceRequest = new ServiceRequest
                 {
                     Reference = "SR-" + DateTime.Now.Ticks,
-                    Fees = selectedFees.Select(f => new Fees { Code = f.Code, Amount = f.Amount }).ToList()
+                    Fees = selectedFees.Select(f => new Fees { Code = f.Code, GrossAmount = f.Amount }).ToList()
                 };
                 case1.ServiceRequests.Add(newServiceRequest);
             }
         }
+
+        
     }
 }
