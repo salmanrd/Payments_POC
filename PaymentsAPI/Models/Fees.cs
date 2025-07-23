@@ -19,6 +19,15 @@
             Remissiom = new HelpWithFees();
             _apportionmentList = new List<Apportionment>();
         }
+
+        public int AmountApportioned
+
+        { 
+            get 
+            { 
+                return _apportionmentList.Sum(x => x.ApportionedAmount); 
+            } 
+        }
         public string Code { get; set; }
         public int GrossAmount { get; set; }
 

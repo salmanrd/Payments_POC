@@ -59,13 +59,23 @@ namespace PaymentsAPI.DataLayer
         {
             foreach (var fee in serviceRequest.Fees)
             {
-                
+                if (paymentAmount <= 0)
+                    break;
+                if (fee.AmountApportioned == fee.GrossAmount)
+                    continue;
 
-                if (paymentAmount >= fee.GrossAmount && fee != serviceRequest.Fees.Last())
+                var balance = fee.GrossAmount - fee.AmountApportioned;
+
+               if( fee == serviceRequest.Fees.Last())
                 {
-                    fee.ApportionPayment(paymentInstruction, fee.GrossAmount);
-                    paymentAmount -= fee.GrossAmount;
+                    fee.ApportionPayment(paymentInstruction, paymentAmount);
+                    continue;
                 }
+               if (paymentAmount >= balance)
+               {
+                    fee.ApportionPayment(paymentInstruction, balance);
+                    paymentAmount -= balance;
+               }
                 else
                 {
                     fee.ApportionPayment(paymentInstruction, paymentAmount);

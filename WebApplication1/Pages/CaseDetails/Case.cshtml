@@ -127,6 +127,42 @@
 </p>
 <p>
     <div style="clear:both">
+        <strong>Apportionments</strong>
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>SR Reference</th>
+                    <th>Fee</th>
+                    <th>Apportionment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sr in Model.SelectedCase.ServiceRequests)
+                {
+                    @foreach (var fee in sr.Fees)
+                    {
+                        <tr>
+                            <td>@sr.Reference</td>
+                            <td>@fee.Code</td>
+                            <td>
+                                @foreach (var apportionment in fee.ApportionmentList)
+                                {
+                                    <div>
+                                        @String.Concat(apportionment.Payment.Reference, " (", apportionment.ApportionedAmount, ")")
+                                    </div>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+</p>
+<p>
+    <div style="clear:both">
         <strong>Refunds</strong>
     </div>
 </p>
