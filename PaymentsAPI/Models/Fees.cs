@@ -14,6 +14,24 @@
                 return Remissiom != null  && Remissiom.Discount == 0;
             }
         }
+
+        public int OverPayment
+        {
+            get
+            {
+                return AmountApportioned - ChargeableAmount > 0 ? AmountApportioned - ChargeableAmount : 0;
+            }
+        }
+
+        public int AmountDue
+        {
+            get
+            {
+                return ChargeableAmount - AmountApportioned > 0 ? ChargeableAmount - AmountApportioned: 0;
+            }
+        }
+
+
         public Fees()
         {
             Remissiom = new HelpWithFees();

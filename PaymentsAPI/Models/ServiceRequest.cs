@@ -63,34 +63,56 @@
         {
             get
             {
-                var _payments = 0;
-                foreach (var item in Payments)
-                {
-                    _payments += item.Amount;
-                }
-                if (_payments < InvoiceAmount)
-                {
-                    return 0;
-                }
-                return _payments - InvoiceAmount   ;
+
+                return this.Fees.Sum(x => x.OverPayment);
+
             }
+
         }
+
         public int AmountDue
         {
             get
             {
-                var _payments = 0;
-                foreach (var item in Payments)
-                {
-                    _payments += item.Amount;
-                }
-                if (_payments >= InvoiceAmount)
-                {
-                    return 0;
-                }
-                return InvoiceAmount - _payments;
+
+                return this.Fees.Sum(x => x.AmountDue);
+
             }
+
         }
+
+        //public int OverPayment
+        //{
+        //    get
+        //    {
+        //        var _payments = 0;
+        //        foreach (var item in Payments)
+        //        {
+        //            _payments += item.Amount;
+        //        }
+        //        if (_payments < InvoiceAmount)
+        //        {
+        //            return 0;
+        //        }
+        //        return _payments - InvoiceAmount   ;
+        //    }
+        //}
+        //public int AmountDue
+        //{
+        //    get
+        //    {
+        //        var _payments = 0;
+        //        foreach (var item in Payments)
+        //        {
+        //            _payments += item.Amount;
+        //        }
+        //        if (_payments >= InvoiceAmount)
+        //        {
+        //            return 0;
+        //        }
+        //        return InvoiceAmount - _payments;
+        //    }
+        //}
 
 
 
@@ -112,7 +134,8 @@
             }
             else if (_payments > 0 && _payments < InvoiceAmount)
             {
-                return String.Concat("Partially Paid" , " Yet to pay :(",InvoiceAmount - _payments  ,")" );
+                // return String.Concat("Partially Paid" , " Yet to pay :(",InvoiceAmount - _payments  ,")" );
+                return String.Concat("Partially Paid", "");
             }
             else
             {

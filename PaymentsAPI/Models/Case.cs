@@ -10,6 +10,8 @@
             }
         }
 
+        
+
         public int AmountDue
         {
             get
