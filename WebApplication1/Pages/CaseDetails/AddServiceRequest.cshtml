@@ -10,9 +10,21 @@
 <div class="container mt-5">
     <h2>Add Service Request</h2>
 
-    <form method="post">
+    <form method="post" asp-page-handler="AddFee">
+         <div class="mb-3">
+            <input type="hidden" asp-for="CaseId" />
+            <input type="hidden" asp-for="FeeCode"  value="Fee999"/>
+            <label asp-for="FeeAmount" class="form-label"></label>
+            <input asp-for="FeeAmount" class="form-control" />
+            <span asp-validation-for="FeeAmount" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <form method="post" asp-page-handler="AddFee1">
         <div class="mb-3">
-            <label asp-for="CaseId" class="form-label" hidden="true"></label>
+            <input type="hidden" asp-for="CaseId" />
             @foreach (var fee in Model.AllFees)
             {
                 <div class="form-check">

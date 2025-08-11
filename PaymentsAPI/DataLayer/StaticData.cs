@@ -137,6 +137,22 @@ namespace PaymentsAPI.DataLayer
 
         }
 
+        public void AddServiceRequest(string caseId, FeeItem feeItem)
+        {
+            var case1 = CaseList.FirstOrDefault(c => c.CaseId == caseId);
+            if (case1 != null)
+            {
+                var newServiceRequest = new ServiceRequest
+                {
+                    Reference = "SR-" + DateTime.Now.Ticks,
+                    Fees = new List<Fees>
+                    {
+                        new Fees { Code = feeItem.Code, GrossAmount = feeItem.Amount }
+                    }
+                };
+                case1.ServiceRequests.Add(newServiceRequest);
+            }
+        }
 
         public void AddServiceRequest(string caseId, List<FeeItem> selectedFees)
         {

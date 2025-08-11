@@ -40,6 +40,7 @@ namespace PaymentsWeb.Pages.CaseDetails
                 ModelState.AddModelError("DiscountAmount", "Discount amount must be greater than zero.");
                 return Page();
             }
+
             if (discountAmount > 0)
             {
                 var case1 = _staticData.CaseList.FirstOrDefault(c => c.CaseId == caseId);
