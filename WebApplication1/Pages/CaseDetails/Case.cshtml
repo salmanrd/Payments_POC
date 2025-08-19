@@ -83,7 +83,7 @@
                         </td>
                         <td>@if (sr.CanPay)
                             {
-                                       <a href="AddPayment?caseId=@Model.SelectedCase.CaseId&sr=@sr.Reference">
+                                <a href="AddPayment?caseId=@Model.SelectedCase.CaseId&sr=@sr.Reference">
                                      Add Payment
                                 </a>
                             }
@@ -104,6 +104,7 @@
                     <th>Amount</th>
                     <th>SR Reference</th>
                     <th>Payment Reference</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -116,7 +117,11 @@
                             <td>@pay.Amount</td>
                             <td>@sr.Reference</td>
                             <td>@pay.Reference</td>
-                            
+                            <td>
+                                <a href="AddRefund?caseId=@Model.SelectedCase.CaseId&paymentReference=@pay.Reference">
+                                    Add Refund
+                                </a>
+                            </td>
                      </tr>
                     }
 

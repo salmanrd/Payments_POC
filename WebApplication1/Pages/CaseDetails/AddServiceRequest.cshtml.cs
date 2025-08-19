@@ -55,7 +55,7 @@ namespace PaymentsWeb.Pages.CaseDetails
             }
 
             if (feeAmount > 0)
-            {
+            {   
                 
                 _staticData.AddServiceRequest(caseId , new FeeItem { Code = feeCode, Amount = feeAmount });
             }

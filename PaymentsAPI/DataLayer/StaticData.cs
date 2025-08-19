@@ -1,4 +1,5 @@
 ﻿using PaymentsAPI.Models;
+using System.ComponentModel;
 
 namespace PaymentsAPI.DataLayer
 {
@@ -168,6 +169,38 @@ namespace PaymentsAPI.DataLayer
             }
         }
 
-        
+        public List<Fees> GetFeesApportionedforPayment(PaymentInstruction paymentInstruction)
+        {
+            var apportionedFees = new List<Fees>();
+            foreach (var case1 in CaseList)
+            {
+                foreach (var serviceRequest in case1.ServiceRequests)
+                {
+                    foreach (var fee in serviceRequest.Fees)
+                    {
+                        if (fee.ApportionmentList.Any(a => a.Payment.Reference == paymentInstruction.Reference))
+                        {
+                            apportionedFees.Add(fee);
+                        }
+                    }
+                }
+            }
+            return apportionedFees;
+        }
+
+        public PaymentInstruction GetPaymentByReference(string caseId, string paymentReference)
+        {
+            PaymentInstruction payment = null;
+            var case1 = CaseList.FirstOrDefault(c => c.CaseId == caseId);
+            if (case1 != null)
+            {
+                foreach (var serviceRequest in case1.ServiceRequests)
+                {
+                    payment = serviceRequest.Payments.FirstOrDefault(p => p.Reference == paymentReference);
+                    break;
+                }
+            }
+            return payment;
+        }
     }
 }
