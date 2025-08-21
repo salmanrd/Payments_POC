@@ -2,11 +2,19 @@
 {
     public class Fees
     {
+        public string Id 
+        {
+            get;
+        }
+        
+
         private List<Apportionment> _apportionmentList;
         public List<Apportionment> ApportionmentList
         {
             get { return _apportionmentList; }
         }
+
+        public int AmountRefunded { get; set; }
         public bool CanAddRemission
         {
             get
@@ -19,7 +27,8 @@
         {
             get
             {
-                return AmountApportioned - ChargeableAmount > 0 ? AmountApportioned - ChargeableAmount : 0;
+                return AmountApportioned - ChargeableAmount - AmountRefunded > 0 ? 
+                    AmountApportioned - ChargeableAmount - AmountRefunded: 0;
             }
         }
 
@@ -34,6 +43,7 @@
 
         public Fees()
         {
+            Id = Guid.NewGuid().ToString();
             Remissiom = new HelpWithFees();
             _apportionmentList = new List<Apportionment>();
         }

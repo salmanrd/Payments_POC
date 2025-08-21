@@ -6,6 +6,7 @@ namespace PaymentsAPI.DataLayer
     public class StaticData
     {
         public List<Case> CaseList;
+        public List<RefundInstruction> RefundList;
 
 
         public StaticData()
@@ -85,34 +86,6 @@ namespace PaymentsAPI.DataLayer
             }
         }
 
-        private static void CreateApportionment2(int paymentAmount, ServiceRequest serviceRequest, PaymentInstruction paymentInstruction)
-        {
-            var apportionAmount = paymentAmount;
-
-            if (serviceRequest.Fees.Count == 1)
-            {
-                serviceRequest.Fees[0].ApportionPayment(paymentInstruction, paymentAmount);
-            }
-            else
-            {
-                foreach (var fee in serviceRequest.Fees)
-                {
-                    
-                    if (fee.GrossAmount < apportionAmount)
-                    {
-                        fee.ApportionPayment(paymentInstruction, fee.GrossAmount);
-                        
-                    }
-                    else
-                    {
-                        fee.ApportionPayment(paymentInstruction, apportionAmount);
-
-                    }
-                    apportionAmount = apportionAmount - fee.GrossAmount;
-
-                }
-            }
-        }
 
         public void AddDiscount(string caseId, string sr, string feeCode, int discountAmount)
         {
@@ -202,5 +175,29 @@ namespace PaymentsAPI.DataLayer
             }
             return payment;
         }
-    }
+
+        public void AddRefund(string feeId, string paymentReference, int refundAmount)
+        {
+                var refundInstruction = new RefundInstruction
+                {
+                    Reference = "RF" + DateTime.Now.Ticks,
+                    PaymentReference = paymentReference,
+                    Amount = refundAmount,
+                };
+                if (RefundList == null)
+                {
+                    RefundList = new List<RefundInstruction>();
+                }
+                RefundList.Add(refundInstruction);
+
+                var fee = CaseList.SelectMany(c => c.ServiceRequests)
+                              .SelectMany(sr => sr.Fees)
+                              .FirstOrDefault(f => f.Id == feeId);
+
+                fee.AmountRefunded = refundAmount;
+        }
+            
+
+
+        }
 }

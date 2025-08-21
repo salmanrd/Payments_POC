@@ -1,4 +1,30 @@
 ﻿@page
 @model PaymentsWeb.Pages.CaseDetails.AddRefundModel
+
 @{
+    ViewData["Title"] = "Add Refund";
 }
+
+<h2>Add Refund</h2>
+
+<div>
+    @if (Model.CanAddRefund)
+    {
+        <form method="post">
+            <label asp-for="PaymentReference" class="form-label" hidden="true"></label>
+            <input type="hidden" asp-for="FeeId" />
+
+            <div class="mb-3">
+                <label asp-for="RefundAmount" class="form-label"></label>
+                <input asp-for="RefundAmount" class="form-control" readonly />
+                <span asp-validation-for="RefundAmount" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    }
+    else
+    {
+        <p>Only overpayments can be refunded in this version. Nothing to refund atm</p>
+    }
+</div>

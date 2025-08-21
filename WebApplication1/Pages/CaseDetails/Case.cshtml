@@ -170,4 +170,24 @@
     <div style="clear:both">
         <strong>Refunds</strong>
     </div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Refund Reference</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RefundList !=null)
+            @foreach (var refund in Model.RefundList)
+            {
+                <tr>
+                    <td>@refund.Reference</td>
+                    <td>@refund.Amount</td>
+                    <td>@refund.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </p>

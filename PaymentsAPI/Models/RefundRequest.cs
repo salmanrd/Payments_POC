@@ -2,9 +2,11 @@
 {
     public class RefundRequest
     {
-
-        public void Create(PaymentInstruction payment, List<Fees> fees)
+        public int Amount { get; set; }
+        public string FeeId { get; set; }
+        public static RefundRequest Create(PaymentInstruction payment, List<Fees> fees)
         {
+            RefundRequest refundRequest = null;
             if (payment == null)
             {
                 throw new ArgumentNullException(nameof(payment), "Payment instruction cannot be null.");
@@ -19,27 +21,16 @@
             { 
                 if (fee.OverPayment > 0)
                 {
-                    
+                    refundRequest = new RefundRequest
+                    {
+                        FeeId = fee.Id,
+                        Amount = fee.OverPayment
+                    };
+                    break;
                 }
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-            // Here you would typically add logic to process the refund request
-            // For example, you might call a payment gateway API to initiate the refund
-            // This is a placeholder for such logic
-            Console.WriteLine($"Refund requested for payment with reference: {payment.Reference}, amount: {payment.Amount}");
-
+            return refundRequest;
         }
 
 

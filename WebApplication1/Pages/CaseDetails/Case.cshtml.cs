@@ -10,6 +10,8 @@ namespace WebApplication1.Pages.CaseDetails
         private readonly StaticData _staticData;
         public Case SelectedCase { get; set; }
 
+        public List<RefundInstruction> RefundList { get; set; }
+
         public CaseModel(StaticData staticData)
         {
              _staticData = staticData;
@@ -19,6 +21,7 @@ namespace WebApplication1.Pages.CaseDetails
             var caseList = _staticData.CaseList ;
 
             SelectedCase = caseList.FirstOrDefault(c => c.CaseId == caseId);
+            RefundList = _staticData.RefundList;
         }
             
     }
