@@ -14,6 +14,19 @@ namespace PaymentsAPI.DataLayer
             Init();
         }
 
+        public void HardReset()
+        {
+            CaseList = new List<Case>
+            {
+                new Case 
+                    { 
+                        CaseId = "101", ServiceRequests = new List<ServiceRequest>()
+                    }
+                
+            };
+
+            RefundList = new List<RefundInstruction>();
+        }
         public void Init()
         {
             CaseList = new List<Case>
@@ -193,8 +206,13 @@ namespace PaymentsAPI.DataLayer
                 var fee = CaseList.SelectMany(c => c.ServiceRequests)
                               .SelectMany(sr => sr.Fees)
                               .FirstOrDefault(f => f.Id == feeId);
-
-                fee.AmountRefunded = refundAmount;
+                
+                if (fee == null) throw new ArgumentException("Fee not found", nameof(feeId));
+                fee.OverPaidRefundItemList.Add(new OverPaidRefundItem
+                    {
+                        Amount = refundAmount,
+                        RefundReference = refundInstruction.Reference
+                    });
         }
             
 

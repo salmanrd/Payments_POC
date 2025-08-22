@@ -22,7 +22,12 @@
                     @case1.CaseId
                     </a>
                 </td>
-                <td>@case1.ServiceRequests[0].Reference</td>
+                <td>
+                    @foreach (var sr in case1.ServiceRequests)
+                    {
+                        @sr.Reference <br />
+                    }
+                </td>
             </tr>
         }
     </tbody>

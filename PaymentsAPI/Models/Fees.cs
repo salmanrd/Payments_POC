@@ -1,12 +1,30 @@
 ﻿namespace PaymentsAPI.Models
 {
+    public class OverPaidRefundItem
+    {
+        public int Amount { get; set; }
+        public string RefundReference { get; set; }
+    }
     public class Fees
     {
+        public Fees()
+        {
+            Id = Guid.NewGuid().ToString();
+            Remissiom = new HelpWithFees();
+            
+            _apportionmentList = new List<Apportionment>();
+            _overPaidRefundItemList = new List<OverPaidRefundItem>();
+        }
+
         public string Id 
         {
             get;
         }
-        
+        private List<OverPaidRefundItem> _overPaidRefundItemList;
+        public List<OverPaidRefundItem> OverPaidRefundItemList
+        {
+            get { return _overPaidRefundItemList; }
+        }
 
         private List<Apportionment> _apportionmentList;
         public List<Apportionment> ApportionmentList
@@ -14,7 +32,13 @@
             get { return _apportionmentList; }
         }
 
-        public int AmountRefunded { get; set; }
+        public  int AmountRefunded 
+        { 
+            get 
+            { 
+                return _overPaidRefundItemList.Sum(x => x.Amount); 
+            }
+        }
         public bool CanAddRemission
         {
             get
@@ -41,12 +65,7 @@
         }
 
 
-        public Fees()
-        {
-            Id = Guid.NewGuid().ToString();
-            Remissiom = new HelpWithFees();
-            _apportionmentList = new List<Apportionment>();
-        }
+        
 
         public int AmountApportioned
 
