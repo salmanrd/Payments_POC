@@ -46,6 +46,7 @@ namespace PaymentsAPI.DataLayer
                 }
 
             };
+            RefundList = new List<RefundInstruction>();
         }
 
         public void AddPayment(string caseId, string sr, int paymentAmount)
@@ -177,15 +178,19 @@ namespace PaymentsAPI.DataLayer
         public PaymentInstruction GetPaymentByReference(string caseId, string paymentReference)
         {
             PaymentInstruction payment = null;
-            var case1 = CaseList.FirstOrDefault(c => c.CaseId == caseId);
-            if (case1 != null)
-            {
-                foreach (var serviceRequest in case1.ServiceRequests)
-                {
-                    payment = serviceRequest.Payments.FirstOrDefault(p => p.Reference == paymentReference);
-                    break;
-                }
-            }
+            //var case1 = CaseList.FirstOrDefault(c => c.CaseId == caseId);
+            //if (case1 != null)
+            //{
+            //    foreach (var serviceRequest in case1.ServiceRequests)
+            //    {
+            //        payment = serviceRequest.Payments.Where(p => p.Reference == paymentReference).First();
+            //        break;
+            //    }
+            //}
+
+            payment = CaseList.SelectMany(c => c.ServiceRequests)
+                              .SelectMany(sr => sr.Payments)
+                              .FirstOrDefault(p => p.Reference == paymentReference);
             return payment;
         }
 

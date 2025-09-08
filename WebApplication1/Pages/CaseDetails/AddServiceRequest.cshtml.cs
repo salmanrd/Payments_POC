@@ -36,7 +36,9 @@ namespace PaymentsWeb.Pages.CaseDetails
             new FeeItem { Code = "F002", Amount = 50 },
             new FeeItem { Code = "F003", Amount = 300 },
             new FeeItem { Code = "F004" , Amount = 273 },
-             new FeeItem { Code = "F005" , Amount = 200 }
+            new FeeItem { Code = "F005" , Amount = 200 },
+            new FeeItem { Code = "F006" , Amount = 45 },
+            new FeeItem { Code = "F007" , Amount = 612 }
         };
         public void OnGet(string caseId)
         {
